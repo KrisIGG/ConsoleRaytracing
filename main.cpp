@@ -147,29 +147,35 @@ struct Camera{
                 if(d < 0){
                     continue;
                 }
-                drawOnScreen(x, y, SYMBOLS[0]);
+                float brightness = d*10;
+                drawOnScreen(x, y, SYMBOLS[(int)brightness]);
             }
         }
     }
 };
 
 // ============================================================================================
+// cls && g++ main.cpp -o main.exe && main.exe
 
-Camera camera(vec3(), RESOLUTION_X, RESOLUTION_Y, 100.0, true);
+Camera camera(vec3(), RESOLUTION_X, RESOLUTION_Y, 50.0, true);
 std::vector<Triangle> triangles;
 std::pair<int, int> point;
 void init(){
     point.first = 0;
     point.second = 10;
-    triangles.push_back(Triangle(vec3(10, 10, 150), vec3(35, 25, 150), vec3(20, 0, 150)));
+    triangles.push_back(Triangle(vec3(-0.5, -0.5, 50), vec3(3.5, 2.5, 50), vec3(4.0, -2.0, 50)));
 } 
 void update(){
     if(curr_frame%10 == 0){
         point.first++;
     }
-    triangles[0].p1.z--;
-    triangles[0].p2.z--;
-    triangles[0].p3.z--;
+    if(triangles[0].p1.z > 5){
+        triangles[0].p1.z--;
+    }else if(triangles[0].p2.z > 5){
+        triangles[0].p2.z--;
+    }else if(triangles[0].p3.z > 5){
+        triangles[0].p3.z--;
+    }
 
     camera.castRays(triangles);
     drawOnScreen(point.first, point.second, '@');
@@ -189,7 +195,7 @@ int main(){
         std::cout<<screen;
         std::cout<<line<<"\n";
         
-        usleep(2000);
+        usleep(3000);
         curr_frame++;
         // break;
     }
